@@ -1,0 +1,5 @@
+include/flyline.h
+src/fly_line.cpp
+src/fly_loiter.cpp
+src/fly_sitl.cpp
+src/fly_track.cpp
