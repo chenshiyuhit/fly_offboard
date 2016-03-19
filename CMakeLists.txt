@@ -46,6 +46,10 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/./bin)
  add_dependencies(flysitl fly_offboard_generate_messages_cpp)
  target_link_libraries(flysitl  ${catkin_LIBRARIES})
 
-
+ add_executable(flytrack src/fly_track.cpp)
+ add_dependencies(flytrack fly_offboard_generate_messages_cpp)
+ target_link_libraries(flytrack  ${catkin_LIBRARIES})
+ 
+ 
 #set optimization level 
 set(CMAKE_BUILD_TYPE Release)
