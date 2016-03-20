@@ -50,9 +50,6 @@ void track(Vector3d t)
 void addheight(Vector3d h)
 {
     geometry_msgs::PoseStamped addheight_sp;
-
-    h(2)=h(2)+0.1;
-
     addheight_sp.pose.position.x = h(0);
     addheight_sp.pose.position.y = h(1);
     addheight_sp.pose.position.z = h(2) ;
@@ -108,28 +105,60 @@ int main(int argc, char **argv)
             ROS_INFO("Tracking the ground target!!!");
 
             ros::spinOnce();
-            if(x<150 && y<110 && x>0 && y>0)
+            if((x<150 || y<110) && x>0 && y>0 && x<160 && y<120)
             {
-                beginpoint_(0) = uav_x - 0.05;
-                beginpoint_(1) = uav_y + 0.05*(y/x);
+                if(x<150 && y>((11/15)*x))
+                {
+                    beginpoint_(0) = uav_x - 0.1;
+                    beginpoint_(1) = uav_y + 0.1*((120-y)/(160-x));
+                }
+                else
+                {
+                    beginpoint_(0) = uav_x - 0.1*((160-x)/(120-y));
+                    beginpoint_(1) = uav_y + 0.1;
+                }
                 track(beginpoint_);
             }
-            if(x<150 && y>130 && x>0)
+            if((x<150 || y>130) && x>0 && x<160 && y>120)
             {
-                beginpoint_(0) = uav_x - 0.05;
-                beginpoint_(1) = uav_y - 0.05*(y/x);
+                if(x<150 && y<(240-(11/15)*x))
+                {
+                    beginpoint_(0) = uav_x - 0.1;
+                    beginpoint_(1) = uav_y - 0.1*((y-120)/(160-x));
+                }
+                else
+                {
+                    beginpoint_(0) = uav_x - 0.1*((160-x)/(y-120));
+                    beginpoint_(1) = uav_y - 0.1;
+                }
                 track(beginpoint_);
             }
-            if(x>170 && y<110 && y>0)
+            if((x>170 || y<110) && y>0 && x>160 && y<120)
             {
-                beginpoint_(0) = uav_x + 0.05;
-                beginpoint_(1) = uav_y + 0.05*(y/x);
+                if(x>170 && y>((11/15)*(320-x)))
+                {
+                    beginpoint_(0) = uav_x + 0.1;
+                    beginpoint_(1) = uav_y + 0.1*((120-y)/(x-160));
+                }
+                else
+                {
+                    beginpoint_(0) = uav_x + 0.1*((x-160)/(120-y));
+                    beginpoint_(1) = uav_y + 0.1;
+                }
                 track(beginpoint_);
             }
-            if(x>170 && y>130)
+            if((x>170 || y>130) && x>160 && y>120)
             {
-                beginpoint_(0) = uav_x + 0.05;
-                beginpoint_(1) = uav_y - 0.05*(y/x);
+                if(x>170 && y<(240-(11/15)*(320-x)))
+                {
+                    beginpoint_(0) = uav_x + 0.1;
+                    beginpoint_(1) = uav_y - 0.1*((y-120)/(x-160));
+                }
+                else
+                {
+                    beginpoint_(0) = uav_x + 0.1*((x-160)/(y-120));
+                    beginpoint_(1) = uav_y - 0.1;
+                }
                 track(beginpoint_);
             }
             if(x>150 && y>110 && x<170 && y<130)
@@ -155,6 +184,11 @@ int main(int argc, char **argv)
             ros::spinOnce();
             endpoint_(0) = uav_x;
             endpoint_(1) = uav_y;
+            endpoint_(2) = uav_z + 0.1;
+            if(endpoint_(2) > 2.5)
+            {
+                endpoint_(2) = 2.5;
+            }
             addheight(endpoint_);
 
             ros::spinOnce();
