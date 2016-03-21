@@ -1,6 +1,7 @@
 #include "../include/flytrack.h"
 
 
+
 void tldposeCallBack(const geometry_msgs::Pose2DConstPtr &msg)
 {
     x     = msg->x;
@@ -109,13 +110,15 @@ int main(int argc, char **argv)
             {
                 if(x<150 && y>((11/15)*x))
                 {
-                    beginpoint_(0) = uav_x - 0.1;
+                    beginpoint_(0) = uav_x + 0.1;
                     beginpoint_(1) = uav_y + 0.1*((120-y)/(160-x));
+                    beginpoint_(2) = now_height;
                 }
                 else
                 {
-                    beginpoint_(0) = uav_x - 0.1*((160-x)/(120-y));
+                    beginpoint_(0) = uav_x + 0.1*((160-x)/(120-y));
                     beginpoint_(1) = uav_y + 0.1;
+                    beginpoint_(2) = now_height;
                 }
                 track(beginpoint_);
             }
@@ -124,12 +127,14 @@ int main(int argc, char **argv)
                 if(x<150 && y<(240-(11/15)*x))
                 {
                     beginpoint_(0) = uav_x - 0.1;
-                    beginpoint_(1) = uav_y - 0.1*((y-120)/(160-x));
+                    beginpoint_(1) = uav_y + 0.1*((y-120)/(160-x));
+                    beginpoint_(2) = now_height;
                 }
                 else
                 {
                     beginpoint_(0) = uav_x - 0.1*((160-x)/(y-120));
-                    beginpoint_(1) = uav_y - 0.1;
+                    beginpoint_(1) = uav_y + 0.1;
+                    beginpoint_(2) = now_height;
                 }
                 track(beginpoint_);
             }
@@ -138,12 +143,14 @@ int main(int argc, char **argv)
                 if(x>170 && y>((11/15)*(320-x)))
                 {
                     beginpoint_(0) = uav_x + 0.1;
-                    beginpoint_(1) = uav_y + 0.1*((120-y)/(x-160));
+                    beginpoint_(1) = uav_y - 0.1*((120-y)/(x-160));
+                    beginpoint_(2) = now_height;
                 }
                 else
                 {
                     beginpoint_(0) = uav_x + 0.1*((x-160)/(120-y));
-                    beginpoint_(1) = uav_y + 0.1;
+                    beginpoint_(1) = uav_y - 0.1;
+                    beginpoint_(2) = now_height;
                 }
                 track(beginpoint_);
             }
@@ -151,13 +158,15 @@ int main(int argc, char **argv)
             {
                 if(x>170 && y<(240-(11/15)*(320-x)))
                 {
-                    beginpoint_(0) = uav_x + 0.1;
+                    beginpoint_(0) = uav_x - 0.1;
                     beginpoint_(1) = uav_y - 0.1*((y-120)/(x-160));
+                    beginpoint_(2) = now_height;
                 }
                 else
                 {
-                    beginpoint_(0) = uav_x + 0.1*((x-160)/(y-120));
+                    beginpoint_(0) = uav_x - 0.1*((x-160)/(y-120));
                     beginpoint_(1) = uav_y - 0.1;
+                    beginpoint_(2) = now_height;
                 }
                 track(beginpoint_);
             }
@@ -165,6 +174,12 @@ int main(int argc, char **argv)
             {
                 beginpoint_(0) = uav_x;
                 beginpoint_(1) = uav_y;
+                beginpoint_(2) = uav_z - 0.2;
+                if(beginpoint_(2) < 1.5)
+                {
+                    beginpoint_(2) = 1.5;
+                }
+                now_height = beginpoint_(2);
                 track(beginpoint_);
             }
 
@@ -194,6 +209,7 @@ int main(int argc, char **argv)
             ros::spinOnce();
             if(x>0 && y>0)
             {
+                now_height  = endpoint_(2);
                 lost_flag   = false;
                 track_flag  = true;
             }

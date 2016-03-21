@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 
-
+double now_height = 1.5;
 
 bool search_flag = true;
 bool track_flag  = false;
